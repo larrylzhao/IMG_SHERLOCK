@@ -42,11 +42,11 @@ class ela:
                 diffImg = ImageChops.difference(image, image2)
                 diffName = self.diffPath+os.sep+ntpath.basename(img)
                 diffName = os.path.splitext(diffName)[0]+'.jpg'
-                extrema = diffImg.getextrema()
-                max_diff = max([ex[1] for ex in extrema])
-                scale = 255.0/max_diff
-
-                diffImg = ImageEnhance.Brightness(diffImg).enhance(scale)
+                # extrema = diffImg.getextrema()
+                # max_diff = max([ex[1] for ex in extrema])
+                # scale = 255.0/max_diff
+                #
+                # diffImg = ImageEnhance.Brightness(diffImg).enhance(scale)
                 diffImg.save(diffName,"JPEG")
 
 

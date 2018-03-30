@@ -30,9 +30,20 @@ class cnn:
 
 
 def main():
-    img_list = glob('casia2'+os.sep+'Au'+os.sep+'*')
+    # img_list = glob('casia2'+os.sep+'Au'+os.sep+'*')
+    # cnnIns = cnn()
+    # outDir = cnnIns.getOutPath() + 'Au_cropped'
+    # if not os.path.exists(outDir):
+    #     os.makedirs(outDir)
+    # for imgPath in img_list:
+    #     img = cnnIns.random_crop(imgPath, 128, 128)
+    #     fName = outDir+os.sep+ntpath.basename(imgPath)
+    #     fName = os.path.splitext(fName)[0]+'.jpg'
+    #     img.save(fName, "JPEG")
+
+    img_list = glob('casia2'+os.sep+'Tp'+os.sep+'*')
     cnnIns = cnn()
-    outDir = cnnIns.getOutPath() + 'Au_cropped'
+    outDir = cnnIns.getOutPath() + 'Tp_cropped'
     if not os.path.exists(outDir):
         os.makedirs(outDir)
     for imgPath in img_list:

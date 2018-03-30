@@ -7,7 +7,7 @@ from keras.models import Sequential, load_model
 from keras.layers import Dense, Dropout, Flatten, Activation
 from keras.optimizers import SGD, Adam
 from keras.layers.convolutional import Conv2D, MaxPooling2D
-from keras import backend as K
+from keras.preprocessing.image import ImageDataGenerator
 
 SPLIT = .7
 
@@ -66,8 +66,6 @@ def perform_ela():
         print(get_timestamp(), "data and label set mismatch")
         quit()
 
-
-
     # train MLP for ELA data
     model = Sequential()
     model.add(Dense(1024, input_dim=trainSet.shape[1], activation='sigmoid'))
@@ -104,10 +102,10 @@ def perform_ela():
 def perform_cnn():
 
     # convert the images to 128x128 patches
-    arr = img_to_array.keras_img_to_array_dir("casia2/Au/", 128, 128)
+    arr = img_to_array.keras_img_to_array_dir("cnn/CASIA_V2/Au_cropped", 128, 128)
     auArr = np.array(arr)
     # np.savetxt('data/cnn_au.txt', arr, fmt='%d')
-    arr = img_to_array.keras_img_to_array_dir("casia2/Tp/", 128, 128)
+    arr = img_to_array.keras_img_to_array_dir("cnn/Tp", 128, 128)
     tpArr = np.array(arr)
     # np.savetxt('data/cnn_tp.txt', arr, fmt='%d')
 
@@ -118,17 +116,21 @@ def perform_cnn():
     # np.random.shuffle(auArr)
     # np.random.shuffle(tpArr)
 
-    iAuSplit = 4000
-    print("iAuSplit: ", iAuSplit)
-    trainSet = np.concatenate((auArr[:iAuSplit], tpArr[:iAuSplit]))
-    testSet = np.concatenate((auArr[iAuSplit:], tpArr[iAuSplit:]))
+    split = int(tpArr.shape[0] * .7)
+    cap = tpArr.shape[0]
+    trainSet = np.concatenate((auArr[:split], tpArr[:split]))
+    testSet = np.concatenate((auArr[split:cap], tpArr[split:cap]))
+
+    # scale the raw pixel intensities to the range [0, 1]
+    trainSet = np.array(trainSet, dtype="float") / 255.0
+    testSet = np.array(testSet, dtype="float") / 255.0
 
     print(auArr.shape, tpArr.shape)
     print(trainSet.shape, testSet.shape)
 
     # set training labels
-    trainLabels = np.concatenate((np.full((iAuSplit, 1), 0), np.full((iAuSplit, 1), 1)))
-    testLabels = np.concatenate((np.full((auArr.shape[0]-iAuSplit, 1), 0), np.full((tpArr.shape[0]-iAuSplit,1),1)))
+    trainLabels = np.concatenate((np.full((split, 1), 0), np.full((split, 1), 1)))
+    testLabels = np.concatenate((np.full((cap - split, 1), 0), np.full((cap - split, 1), 1)))
     np.savetxt('data/cnn_train_labels.txt', trainLabels, fmt='%d')
     np.savetxt('data/cnn_test_labels.txt', testLabels, fmt='%d')
     print(get_timestamp(), "data shape: ", trainSet.shape, testSet.shape)
@@ -155,7 +157,33 @@ def perform_cnn():
     model.add(Conv2D(16, kernel_size=(3, 3), strides=(1, 1), activation='relu'))
     model.add(Conv2D(16, kernel_size=(3, 3), strides=(1, 1), activation='relu'))
     model.add(Flatten())
-    model.add(Dense(2, activation='softmax'))
+    model.add(Dense(1, activation='softmax'))
+
+
+
+    opt = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
+    model.compile(loss='binary_crossentropy',
+                  optimizer=opt,
+                  metrics=['accuracy'])
+
+    # if using aug
+    # construct the image generator for data augmentation
+    # aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
+    #                          height_shift_range=0.1, shear_range=0.2, zoom_range=0.2,
+    #                          horizontal_flip=True, fill_mode="nearest")
+    #
+    # H = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
+    #                         validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,
+    #                         epochs=EPOCHS, verbose=1)
+
+    model.fit(trainSet, trainLabels,
+              epochs=100,
+              batch_size=128,
+              verbose=1,
+              validation_data=(testSet, testLabels))
+
+    model.save("data/cnn_100_adam.h5")
+
 
 # perform_ela()
 perform_cnn()
