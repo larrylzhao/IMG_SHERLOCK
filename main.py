@@ -177,8 +177,8 @@ def perform_cnn():
     #                         epochs=EPOCHS, verbose=1)
 
     model.fit(trainSet, trainLabels,
-              epochs=100,
-              batch_size=128,
+              epochs=10,
+              batch_size=32,
               verbose=1,
               validation_data=(testSet, testLabels))
 

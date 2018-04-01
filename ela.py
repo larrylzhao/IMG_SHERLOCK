@@ -7,8 +7,8 @@ import os
 class ela:
 
     def __init__(self, images):
-        self.outPath = 'ela'+os.sep+'CASIA_V2'+os.sep+'compress'
-        self.diffPath = 'ela'+os.sep+'CASIA_V2'+os.sep+'diff'
+        self.outPath = 'ela'+os.sep+'CASIA_V2_CNN'+os.sep+'compress'
+        self.diffPath = 'ela'+os.sep+'CASIA_V2_CNN'+os.sep+'diff'
         self.images = images
         self.compressed = []
         self.set_compressed()
@@ -51,9 +51,9 @@ class ela:
 
 
 def main():
-    extract_dir = ['Au', 'Tp']
+    extract_dir = ['cnn/CASIA_V2/Au_cropped', 'cnn/Tp']
     for each_dir in extract_dir:
-        img_list = glob('casia2'+os.sep+each_dir+os.sep+'*')
+        img_list = glob(each_dir+os.sep+'*')
         elaIns = ela(img_list)
         elaIns.compress(90)
         print("performing ELA")
