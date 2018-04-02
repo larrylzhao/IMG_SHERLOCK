@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="EclipseCodeFormatter">
+    <option name="defaultSettings" value="true" />
+    <option name="formatter" value="ECLIPSE" />
+    <option name="id" value="1485963046705" />
+    <option name="name" value="default" />
+    <option name="pathToConfigFileJava" value="C:/cygwin64/home/zhali28/work/advancedintegration_hadoop3/IDE Settings/eclipse_formatting.xml" />
+    <option name="selectedJavaProfile" value="Agent Team" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_3" default="false" project-jdk-name="Python 3.6.2 (C:\Users\zhali28\AppData\Local\Programs\Python\Python36\python.exe)" project-jdk-type="Python SDK" />
+</project>
