@@ -42,7 +42,7 @@ args = vars(ap.parse_args())
 
 # initialize model parameters
 SPLIT = .75
-EPOCHS = 10
+EPOCHS = 100
 LR = .001
 BS = 32
 
@@ -128,6 +128,7 @@ plt.plot(np.arange(0, N), H.history["loss"], label="train_loss")
 plt.plot(np.arange(0, N), H.history["val_loss"], label="val_loss")
 plt.plot(np.arange(0, N), H.history["acc"], label="train_acc")
 plt.plot(np.arange(0, N), H.history["val_acc"], label="val_acc")
+
 plt.xlabel("Epoch #")
 plt.ylabel("Loss/Accuracy")
 plt.legend(loc="lower left")

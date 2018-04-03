@@ -14,6 +14,11 @@ class ela:
         self.compressed = []
         self.set_compressed()
 
+        if not os.path.exists(self.outPath):
+            os.makedirs(self.outPath)
+        if not os.path.exists(self.diffPath):
+            os.makedirs(self.diffPath)
+
     def compress(self, qualityVal):
         for img in self.images:
             if not (img.endswith('db')):
