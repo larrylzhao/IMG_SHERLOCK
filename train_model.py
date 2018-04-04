@@ -8,12 +8,14 @@ import matplotlib
 matplotlib.use("Agg")
 
 # import the necessary packages
+from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
-from keras.preprocessing.image import img_to_array
+from keras.preprocessing.image import img_to_array as img_to_array_keras
 from keras.utils import to_categorical
 from models.cnn import cnn
+from models.ela import ela
 from imutils import paths
 import matplotlib.pyplot as plt
 import numpy as np
@@ -22,6 +24,7 @@ import random
 import cv2
 import tensorflow as tf
 import os
+from img_to_array import img_to_array
 
 # try to fix bug with GPU tensorflow
 from keras.backend.tensorflow_backend import set_session
@@ -39,11 +42,13 @@ ap.add_argument("-m", "--model", required=True,
                 help="path to output model")
 ap.add_argument("-p", "--plot", type=str, default="plot.png",
                 help="path to output loss/accuracy plot")
+ap.add_argument("-al", "--algorithm", default="cnn",
+                help="algorithm to use (cnn/ela)")
 args = vars(ap.parse_args())
 
 # initialize model parameters
 SPLIT = .75
-EPOCHS = 100
+EPOCHS = 5
 LR = .001
 BS = 32
 
@@ -70,13 +75,19 @@ else:
 for imagePath in auImagePaths:
     image = cv2.imread(imagePath)
     image = cv2.resize(image, (128, 128))
-    image = img_to_array(image)
+    if args["algorithm"] == "cnn":
+        image = img_to_array_keras(image)
+    elif args["algorithm"] == "ela":
+        image = img_to_array(image,  128, 128)
     data.append(image)
     labels.append(0)
 for imagePath in tpImagePaths:
     image = cv2.imread(imagePath)
     image = cv2.resize(image, (128, 128))
-    image = img_to_array(image)
+    if args["algorithm"] == "cnn":
+        image = img_to_array_keras(image)
+    elif args["algorithm"] == "ela":
+        image = img_to_array(image, 128, 128)
     data.append(image)
     labels.append(1)
 
@@ -99,23 +110,29 @@ aug = ImageDataGenerator(rotation_range=30, width_shift_range=0.1,
 
 # initialize the model
 print("[INFO] compiling model...")
-model = cnn.build_model(width=128, height=128, depth=3, classes=2)
+model = Sequential()
+if args["algorithm"] == "cnn":
+    model = cnn.build_model(width=128, height=128, depth=3, classes=2)
+elif args["algorithm"] == "ela":
+    model = ela.build_model(dim=trainX.shape[1], classes=2)
 opt = Adam(lr=LR, decay=LR / EPOCHS)
 model.compile(loss="binary_crossentropy", optimizer=opt,
               metrics=["accuracy"])
 
 # train the network
 print("[INFO] training network...")
-H = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
-                        validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,
-                        epochs=EPOCHS, verbose=1)
-
-# train model without using data augmentation
-# H = model.model.fit(trainX, trainY,
-# 					epochs=EPOCHS,
-# 					batch_size=BS,
-# 					verbose=1,
-# 					validation_data=(testX, testY))
+H = model
+if args["algorithm"] == "cnn":
+    H = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
+                            validation_data=(testX, testY), steps_per_epoch=len(trainX) // BS,
+                            epochs=EPOCHS, verbose=1)
+elif args["algorithm"] == "ela":
+    # train model without using data augmentation
+    H = model.model.fit(trainX, trainY,
+                        epochs=EPOCHS,
+                        batch_size=BS,
+                        verbose=1,
+                        validation_data=(testX, testY))
 
 # save the model to disk
 print("[INFO] serializing network...")
