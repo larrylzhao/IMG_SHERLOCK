@@ -3,6 +3,7 @@ import numpy as np
 from glob import glob
 import os
 from keras.preprocessing.image import img_to_array as keras_img_to_array
+import ntpath
 
 def img_to_array(imgPath, height, width):
     img = Image.open(imgPath)
@@ -30,3 +31,15 @@ def keras_img_to_array_dir(dir, height, width):
         outArr.append(img)
         # print(img)
     return outArr
+
+def image_resize(dir, height, width):
+    img_list = glob(dir + os.sep + '*')
+    for imgPath in img_list:
+
+        img = Image.open(imgPath)
+        img = img.resize((height, width))
+        filename = "resources/casia2/Tp_128_128"+os.sep+ntpath.basename(imgPath)
+        img.save(os.path.splitext(filename)[0]+'.jpg', "JPEG")
+
+
+image_resize('resources/casia2/Tp', 128, 128)
