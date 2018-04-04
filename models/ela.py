@@ -74,11 +74,11 @@ class ela:
 
 def main():
 
-    # img_list = glob('output/cnn/CASIA_V2/Au_cropped/*')
-    # elaIns = ela(img_list, 'output/ela/CASIA_V2_PATCHES/Au')
-    # elaIns.compress(90)
-    # print("performing ELA")
-    # elaIns.perform_ela()
+    img_list = glob('output/cnn/CASIA_V2/Au_cropped/*')
+    elaIns = ela(img_list, 'output/ela/CASIA_V2_PATCHES/Au')
+    elaIns.compress(90)
+    print("performing ELA")
+    elaIns.perform_ela()
 
     img_list = glob('resources/casia2/Tp_patches/*')
     elaIns = ela(img_list, 'output/ela/CASIA_V2_PATCHES/Tp')
