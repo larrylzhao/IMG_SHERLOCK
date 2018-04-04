@@ -48,7 +48,7 @@ args = vars(ap.parse_args())
 
 # initialize model parameters
 SPLIT = .75
-EPOCHS = 5
+EPOCHS = 100
 LR = .001
 BS = 32
 
@@ -64,6 +64,9 @@ tpImagePaths = sorted(list(paths.list_images(args["tpset"])))
 random.seed(42)
 random.shuffle(auImagePaths)
 random.shuffle(tpImagePaths)
+
+# limit size of dataset
+auImagePaths = auImagePaths[:800]
 
 # balance the datasets
 if (len(auImagePaths) < len(tpImagePaths)):
