@@ -23,7 +23,8 @@ Tp_D_NRD_S_B_ani20002_nat20042 broken?
 CUDA_VISIBLE_DEVICES=""
 
 
-
+ELA
+python train_model.py -a output/ela/CASIA_V2_PATCHES/Au/diff -t output/ela/CASIA_V2_PATCHES/Tp/diff -m output/models/cnn_ela.model -p output/models/cnn_ela.png
 
 ELA CNN
 python train_model.py -a output/ela/CASIA_V2_PATCHES/Au/diff -t output/ela/CASIA_V2_PATCHES/Tp/diff -m output/models/cnn_ela.model -p output/models/cnn_ela.png
