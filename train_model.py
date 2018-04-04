@@ -21,6 +21,7 @@ import argparse
 import random
 import cv2
 import tensorflow as tf
+import os
 
 # try to fix bug with GPU tensorflow
 from keras.backend.tensorflow_backend import set_session
@@ -118,6 +119,9 @@ H = model.fit_generator(aug.flow(trainX, trainY, batch_size=BS),
 
 # save the model to disk
 print("[INFO] serializing network...")
+modelParentPath = os.path.abspath(os.path.join(args["model"], os.pardir))
+if not os.path.exists(modelParentPath):
+    os.makedirs(modelParentPath)
 model.save(args["model"])
 
 # plot the training loss and accuracy
