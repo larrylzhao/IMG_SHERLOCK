@@ -24,7 +24,14 @@ CUDA_VISIBLE_DEVICES=""
 
 
 ELA
-python train_model.py -al ela -a output/ela/CASIA_V2/Au/diff -t output/ela/CASIA_V2/Tp/diff -m output/models/ela.model -p output/models/ela.png
+python3 train_model.py -al ela -a output/ela/CASIA_V2/Au/diff -t output/ela/CASIA_V2/Tp/diff -m output/models/ela.model -p output/models/ela.png
+
+CNN
+python train_model.py -al cnn -a resources/casia2/Au_128_128 -t resources/casia2/Tp_128_128 -m output/models/cnn.model -p output/models/cnn.png
 
 ELA CNN
-python train_model.py -a output/ela/CASIA_V2_PATCHES/Au/diff -t output/ela/CASIA_V2_PATCHES/Tp/diff -m output/models/cnn_ela.model -p output/models/cnn_ela.png
+python train_model.py -al cnn -a output/ela/CASIA_V2/Au/diff -t output/ela/CASIA_V2/Tp/diff -m output/models/cnn_ela.model -p output/models/cnn_ela.png
+
+ELA CNN patches
+python train_model.py -al cnn -a output/ela/CASIA_V2_PATCHES/Au/diff -t output/ela/CASIA_V2_PATCHES/Tp/diff -m output/models/cnn_ela.model -p output/models/cnn_ela.png
+
