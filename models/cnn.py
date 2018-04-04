@@ -13,7 +13,7 @@ from keras.layers.core import Dense
 class cnn:
 
     def __init__(self):
-        self.outPath = 'cnn'+os.sep+'CASIA_V2'+os.sep
+        self.outPath = 'output/cnn/'
 
     def get_out_path(self):
         return self.outPath
@@ -67,29 +67,30 @@ class cnn:
         return model
 
 
-# def main():
-#     cnn.strip_spaces('resources/casia2/Tp_patches')
-#
-#     # img_list = glob('casia2'+os.sep+'Au'+os.sep+'*')
-#     # cnnIns = cnn()
-#     # outDir = cnnIns.get_out_path() + 'Au_cropped'
-#     # if not os.path.exists(outDir):
-#     #     os.makedirs(outDir)
-#     # for imgPath in img_list:
-#     #     img = cnnIns.random_crop(imgPath, 128, 128)
-#     #     fName = outDir+os.sep+ntpath.basename(imgPath)
-#     #     fName = os.path.splitext(fName)[0]+'.jpg'
-#     #     img.save(fName, "JPEG")
-#
-#     # img_list = glob('casia2'+os.sep+'Tp'+os.sep+'*')
-#     # cnnIns = cnn()
-#     # outDir = cnnIns.getOutPath() + 'Tp_cropped'
-#     # if not os.path.exists(outDir):
-#     #     os.makedirs(outDir)
-#     # for imgPath in img_list:
-#     #     img = cnnIns.random_crop(imgPath, 128, 128)
-#     #     fName = outDir+os.sep+ntpath.basename(imgPath)
-#     #     fName = os.path.splitext(fName)[0]+'.jpg'
-#     #     img.save(fName, "JPEG")
-#
-# main()
+def main():
+    # cnn.strip_spaces('resources/casia2/Tp_patches')
+
+    img_list = glob('resources/casia2/Au/*')
+    cnnIns = cnn()
+    outDir = cnnIns.get_out_path() + 'CASIA_V2/Au_cropped'
+    if not os.path.exists(outDir):
+        os.makedirs(outDir)
+    for imgPath in img_list:
+        img = cnnIns.random_crop(imgPath, 128, 128)
+        fName = outDir+os.sep+ntpath.basename(imgPath)
+        fName = os.path.splitext(fName)[0]+'.jpg'
+
+        img.save(fName, "JPEG")
+
+    # img_list = glob('casia2'+os.sep+'Tp'+os.sep+'*')
+    # cnnIns = cnn()
+    # outDir = cnnIns.getOutPath() + 'Tp_cropped'
+    # if not os.path.exists(outDir):
+    #     os.makedirs(outDir)
+    # for imgPath in img_list:
+    #     img = cnnIns.random_crop(imgPath, 128, 128)
+    #     fName = outDir+os.sep+ntpath.basename(imgPath)
+    #     fName = os.path.splitext(fName)[0]+'.jpg'
+    #     img.save(fName, "JPEG")
+
+#main()
