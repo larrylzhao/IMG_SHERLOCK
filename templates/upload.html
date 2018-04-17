@@ -1,0 +1,29 @@
+<html>
+<body>
+
+<title>IMG SHERLOCK</title>
+<h1>Select an image to test</h1>
+<form method=post enctype=multipart/form-data>
+    <p><input type=file name=file>
+        <br/><br/>
+        step size: <input type="text" name=stepsize value="128">
+        <br/><br/>
+        <input type=submit value=test>
+
+</form>
+
+<div style="display: {{ display }}">
+    <p>result: {{ result }}</p>
+    <img src="http://localhost:5000/uploads/{{ file }}">
+
+    &nbsp;&nbsp;&nbsp;
+
+    <img src="http://localhost:5000/results/{{ file }}">
+
+    <br/><br/>
+
+    <img src="http://localhost:5000/ela/{{ file }}">
+</div>
+
+</body>
+</html>
