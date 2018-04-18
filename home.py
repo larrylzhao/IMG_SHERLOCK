@@ -41,7 +41,8 @@ def upload_file():
             # session['img'] = img
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            result = perform_test(filepath=os.path.join(app.config['UPLOAD_FOLDER'], filename), stepSize=int(request.form['stepsize']))
+            result = perform_test(filepath=os.path.join(app.config['UPLOAD_FOLDER'], filename),
+                                  stepSize=int(request.form['stepsize']), threshold=int(request.form['threshold']))
             return render_template('upload.html', display="block", result=result, file=file.filename)
     return render_template('upload.html', display="none")
 
@@ -54,6 +55,19 @@ def serve_img(subfolder, img_name):
     img.save(byte_io, 'PNG')
     byte_io.seek(0)
     return send_file(byte_io, mimetype='image/png')
+
+
+@app.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
 
 
 def sliding_window(image, stepSize, windowSize):
@@ -80,7 +94,7 @@ def sliding_window(image, stepSize, windowSize):
             break
 
 
-def perform_test(filepath, stepSize):
+def perform_test(filepath, stepSize, threshold):
     print("stepsize: " + str(stepSize))
     # load the image
     image = cv2.imread(filepath)
@@ -126,17 +140,15 @@ def perform_test(filepath, stepSize):
     category = "Authentic"
 
     clone = image.copy()
+    clone2 = cv2.imread(filename+"_diff", -1)
+    clone3 = image.copy()
+    print("shape: " + str(clone2.shape))
     (winW, winH) = (128, 128)
+
     for (x, y, window) in sliding_window(elaImg, stepSize=stepSize, windowSize=(winW, winH)):
         # if the window does not meet our desired window size, ignore it
         if window.shape[0] != winH or window.shape[1] != winW:
             continue
-
-        output = window.copy()
-
-        # since we do not have a classifier, we'll just draw the window
-
-
 
         window = window.astype("float") / 255.0
         window = img_to_array_keras(window)
@@ -147,28 +159,28 @@ def perform_test(filepath, stepSize):
         label = "Tampered" if tampered > authentic else "Authentic"
         if label == "Tampered":
             category = "Tampered"
+            for xval in range(x, x+winH):
+                for yval in range(y, y+winW):
+                    channels = clone2[yval][xval]
+                    if channels[0] > threshold or channels[1] > threshold or channels[2] > threshold:
+                        clone3[yval][xval][2] = 255
+
         proba = tampered if tampered > authentic else authentic
         label = "{}: {:.2f}%".format(label, proba * 100)
         proba = "{:.2f}%".format(proba * 100)
 
         # draw the label on the image
-
         print("label: " + label)
 
         color = (0, 0, 255) if tampered > authentic else (0, 255, 0)
 
-
         cv2.rectangle(clone, (x, y), (x + winW, y + winH), color, 2)
-        # cv2.putText(clone, label, (10, 25),  cv2.FONT_HERSHEY_SIMPLEX,
-        #             0.7, (0, 255, 0), 2)
 
         cv2.putText(clone, proba, (x+10, y+25), cv2.FONT_HERSHEY_SIMPLEX,
                     0.7, color, 2)
-        cv2.imshow("Window", clone)
 
-        # cv2.waitKey(1)
-        # time.sleep(.125)
     cv2.imwrite('tmp/results/'+ntpath.basename(filepath), clone)
+    cv2.imwrite('tmp/location/'+ntpath.basename(filepath), clone3)
     os.remove(filename+"_diff")
     os.remove(filename+"_diff2")
 
