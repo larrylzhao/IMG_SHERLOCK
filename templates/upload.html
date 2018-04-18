@@ -1,4 +1,9 @@
 <html>
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+</head>
 <body>
 
 <title>IMG SHERLOCK</title>
@@ -7,6 +12,8 @@
     <p><input type=file name=file>
         <br/><br/>
         step size: <input type="text" name=stepsize value="128">
+        <br/><br/>
+        localization threshold: <input type="text" name=threshold value="3">
         <br/><br/>
         <input type=submit value=test>
 
@@ -23,6 +30,10 @@
     <br/><br/>
 
     <img src="http://localhost:5000/ela/{{ file }}">
+
+    &nbsp;&nbsp;&nbsp;
+
+    <img src="http://localhost:5000/location/{{ file }}">
 </div>
 
 </body>
