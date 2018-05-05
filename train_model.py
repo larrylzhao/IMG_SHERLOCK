@@ -63,7 +63,7 @@ random.shuffle(auImagePaths)
 random.shuffle(tpImagePaths)
 
 # limit size of dataset
-auImagePaths = auImagePaths[:800]
+# auImagePaths = auImagePaths[:800]
 
 # balance the datasets
 if (len(auImagePaths) < len(tpImagePaths)):

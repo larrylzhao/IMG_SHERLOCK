@@ -35,4 +35,7 @@ python train_model.py -al cnn -a output/ela/CASIA_V2/Au/diff -t output/ela/CASIA
 ELA CNN patches
 python train_model.py -al cnn -a output/ela/CASIA_V2_PATCHES/Au/diff -t output/ela/CASIA_V2_PATCHES/Tp/diff -m output/models/cnn_ela.model -p output/models/cnn_ela_patches.png
 
+ELA CNN auto patches
+python train_model.py -al cnn -a output/ela/CASIA_V2_PATCHES/Au/diff -t output/ela/CASIA_V2_AUTO_PATCHES/Tp/diff -m output/models/cnn_ela_auto.model -p output/models/cnn_ela_auto.png
+
 python test_video.py -i resources/videos/Tp_obama_360.mp4 -m output/models/cnn_ela_patches.model
