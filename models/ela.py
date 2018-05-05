@@ -20,6 +20,7 @@ class ela:
             os.makedirs(self.diffPath)
 
     def compress(self, qualityVal):
+        print("compressing images")
         for img in self.images:
             if not (img.endswith('db')):
                 image = Image.open(img)
@@ -34,6 +35,7 @@ class ela:
         return self.compressed
 
     def set_compressed(self):
+        # print("setting compressed")
         for img in self.images:
             filename = self.outPath+os.sep+ntpath.basename(img)
             self.compressed.append(filename)
@@ -74,14 +76,14 @@ class ela:
 
 def main():
 
-    img_list = glob('resources/casia2/Au_128_128/*')
-    elaIns = ela(img_list, 'output/ela/CASIA_V2/Au')
-    elaIns.compress(90)
-    print("performing ELA")
-    elaIns.perform_ela()
+    # img_list = glob('resources/casia2/Au_128_128/*')
+    # elaIns = ela(img_list, 'output/ela/CASIA_V2/Au')
+    # elaIns.compress(90)
+    # print("performing ELA")
+    # elaIns.perform_ela()
 
-    img_list = glob('resources/casia2/Tp_128_128/*')
-    elaIns = ela(img_list, 'output/ela/CASIA_V2/Tp')
+    img_list = glob('resources/casia2/Tp_auto_patches/*')
+    elaIns = ela(img_list, 'output/ela/CASIA_V2_AUTO_PATCHES/Tp')
     elaIns.compress(90)
     print("performing ELA")
     elaIns.perform_ela()
