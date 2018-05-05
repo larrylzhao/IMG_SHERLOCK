@@ -1,6 +1,6 @@
 # USAGE
 # python test_model.py -i resources/casia2/Tp/Tp_D_CNN_M_N_ani00057_ani00055_11149.jpg -m output/models/cnn_ela_patches.model
-# python test_model.py -v resources/videos/Tp_obama_360.mp4 -m output/models/cnn_ela_patches.model
+# python test_model.py -v resources/videos/avengers_vfx.mp4 -m output/models/cnn_ela_auto.model
 
 # import the necessary packages
 from keras.preprocessing.image import img_to_array as img_to_array_keras
@@ -103,16 +103,12 @@ def perform_test(testimage, model):
     clone = image.copy()
     clone2 = cv2.imread(filename+"_diff", -1)
     (winW, winH) = (128, 128)
-    for (x, y, window) in sliding_window2(elaImg, stepSize=int(args["stepsize"]), windowSize=(winW, winH)):
+    for (x, y, window) in sliding_window(elaImg, stepSize=int(args["stepsize"]), windowSize=(winW, winH)):
         # if the window does not meet our desired window size, ignore it
         if window.shape[0] != winH or window.shape[1] != winW:
             continue
 
         output = window.copy()
-
-        # since we do not have a classifier, we'll just draw the window
-
-
 
         window = window.astype("float") / 255.0
         window = img_to_array_keras(window)

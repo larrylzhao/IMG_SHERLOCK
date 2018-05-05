@@ -72,13 +72,13 @@ def main():
 
     img_list = glob('resources/casia2/Au/*')
     cnnIns = cnn()
-    outDir = cnnIns.get_out_path() + 'CASIA_V2/Au_cropped'
+    outDir = cnnIns.get_out_path() + 'CASIA_V2/Au_cropped2'
     if not os.path.exists(outDir):
         os.makedirs(outDir)
     for imgPath in img_list:
         img = cnnIns.random_crop(imgPath, 128, 128)
         fName = outDir+os.sep+ntpath.basename(imgPath)
-        fName = os.path.splitext(fName)[0]+'.jpg'
+        fName = os.path.splitext(fName)[0]+'_2.jpg'
 
         img.save(fName, "JPEG")
 
@@ -93,4 +93,4 @@ def main():
     #     fName = os.path.splitext(fName)[0]+'.jpg'
     #     img.save(fName, "JPEG")
 
-#main()
+# main()
