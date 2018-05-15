@@ -1,6 +1,8 @@
 output/cnn/
 output/data/
 output/ela/
+output/videos/
 tmp/
+resources/videos/
 resources/casia2/Tp_auto_patches/
 .idea/
