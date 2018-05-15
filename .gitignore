@@ -2,6 +2,8 @@ output/cnn/
 output/data/
 output/ela/
 output/videos/
+output/models/cnn.model
+output/models/ela.model
 tmp/
 resources/videos/
 resources/casia2/Tp_auto_patches/
