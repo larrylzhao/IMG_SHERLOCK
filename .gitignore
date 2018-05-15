@@ -8,3 +8,5 @@ tmp/
 resources/videos/
 resources/casia2/Tp_auto_patches/
 .idea/
+.idea/workspace.xml
+*.pyc
